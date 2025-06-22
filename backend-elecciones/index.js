@@ -10,7 +10,21 @@ app.get('/', (req, res) => {
   res.send('API electoral funcionando 🎉');
 });
 
-const PORT = 3001;
+const authRouter = require('./routes/auth');
+const votosRouter = require('./routes/votos');
+const eleccionesRouter = require('./routes/elecciones');
+const listasRouter = require('./routes/listas');
+
+app.use('/auth', authRouter);
+app.use('/votos', votosRouter);
+app.use('/elecciones', eleccionesRouter);
+app.use('/listas', listasRouter);
+
+const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
   console.log(`Servidor escuchando en http://localhost:${PORT}`);
 });
+
+
+
+
