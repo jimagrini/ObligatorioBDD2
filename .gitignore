@@ -1,2 +1,6 @@
 # Ignorar todo el contenido del directorio data/
 data/
+
+frontend-elecciones/node_modules/
+
+backend-elecciones/node_modules/
