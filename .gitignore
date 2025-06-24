@@ -4,3 +4,8 @@ data/
 frontend-elecciones/node_modules/
 
 backend-elecciones/node_modules/
+
+backend-elecciones/package-lock.json
+
+frontend-elecciones/package-lock.json
+
