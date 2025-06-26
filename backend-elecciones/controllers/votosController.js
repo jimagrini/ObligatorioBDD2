@@ -74,4 +74,16 @@ console.error("Error en registrarVoto:", error);
 res.status(500).json({ error: 'Error al registrar el voto', detail: error.message });
 }
 }
-module.exports = { registrarVoto };
+
+async function obtenerVotos(req, res) {
+  try {
+    const conn = await getConnection();
+    const result = await conn.query('SELECT * FROM VOTO');
+    conn.closeSync();
+    res.json(result);
+  } catch (error) {
+    res.status(500).json({ error: 'Error al obtener votos', detail: error.message });
+  }
+}
+
+module.exports = { registrarVoto, obtenerVotos };
