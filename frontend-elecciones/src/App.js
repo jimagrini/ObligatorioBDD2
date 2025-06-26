@@ -11,6 +11,7 @@ import DashboardFuncionario from './components/DashboardFuncionario';
 import DashboardAdmin from './components/DashboardAdmin';
 import RegistroVoto from './components/registrovoto/RegistroVoto';
 import RegistroCiudadano from './components/registrociudadano/RegistroCiudadano';
+import Resultados from './components/resultados/Resultados';
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
         <Route path='/admin' element={<DashboardAdmin />} />
         <Route path='/registro-voto' element={<RegistroVoto />} />
         <Route path='/registro-ciudadano' element={<RegistroCiudadano />} />
+        <Route path='/resultados' element={<Resultados />} />
         <Route path='*' element={<Navigate to='/' />} />
       </Routes>
     </Router>

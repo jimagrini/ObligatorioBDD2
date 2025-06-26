@@ -3,18 +3,6 @@ INSERT INTO CIUDADANO (ci, fecha_nac, nombre) VALUES ('22222222', '1985-02-02', 
 INSERT INTO CIUDADANO (ci, fecha_nac, nombre) VALUES ('33333333', '1970-03-03', 'Administrador Tres');
 INSERT INTO CIUDADANO (ci, fecha_nac, nombre) VALUES ('44444444', '2000-04-04', 'Votante Cuatro');
 
---Insertar habilitado a votar
-INSERT INTO HABILITADO_A_VOTAR (CI, CC, NUM_CIRCUITO) VALUES
-('44444444', 'BGA 1231', '101');
-
--- Insertar funcionario asociado a un circuito existente
--- ⚠️ Reemplazá '101' por un num_circuito existente en tu tabla CIRCUITO
-INSERT INTO FUNCIONARIO (ci, organismo_del_estado, num_circuito, rol)
-VALUES ('11111111', 'Ministerio del Interior', 101, 'presidente');
-
--- Insertar policía
-INSERT INTO POLICIA (ci, seccional, departamento)
-VALUES ('22222222', 'Seccional 5', 'Montevideo');
 
 -- Insertar partidos
 INSERT INTO CIUDADANO (ci, fecha_nac, nombre) VALUES
@@ -134,6 +122,18 @@ INSERT INTO PERTENECE_A_LISTA (CI_CANDIDATO, NUMERO_LISTA, ORGANO_DEL_ESTADO,ORD
 (90000003, 2001, 'poder ejecutivo', 1),
 (90000004, 2002, 'poder ejecutivo', 1);
 
+--Insertar habilitado a votar
+INSERT INTO HABILITADO_A_VOTAR (CI, CC, NUM_CIRCUITO) VALUES
+('44444444', 'BGA12312', '101');
+
+-- Insertar funcionario asociado a un circuito existente
+-- ⚠️ Reemplazá '101' por un num_circuito existente en tu tabla CIRCUITO
+INSERT INTO FUNCIONARIO (ci, organismo_del_estado, num_circuito, rol)
+VALUES ('11111111', 'Ministerio del Interior', 101, 'presidente');
+
+-- Insertar policía
+INSERT INTO POLICIA (ci, seccional, departamento)
+VALUES ('22222222', 'Seccional 5', 'Montevideo');
 
 INSERT INTO TRABAJA_EN_ELECCION (CI_FUNCIONARIO, ID_ELECCION)
 SELECT
