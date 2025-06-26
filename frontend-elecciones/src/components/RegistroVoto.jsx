@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 
 export default function RegistroVoto() {
-  const [ci, setCi] = useState('');
+  const [ci, setNumVoto] = useState('');
   const [idEleccion, setIdEleccion] = useState('');
   const [numeroLista, setNumeroLista] = useState('');
   const [condicion, setCondicion] = useState('válido');
@@ -66,8 +66,8 @@ export default function RegistroVoto() {
       <form onSubmit={handleSubmit} className="flex flex-col gap-3">
         <input
           value={ci}
-          onChange={e => setCi(e.target.value)}
-          placeholder="CI del votante"
+          onChange={e => setNumVoto(e.target.value)}
+          placeholder="Número de voto"
           className="border p-2"
           required
         />
@@ -98,6 +98,7 @@ export default function RegistroVoto() {
           required
         />
 
+        
         <label className="flex items-center gap-2">
           <input type="checkbox" checked={esObservado} onChange={() => setEsObservado(!esObservado)} />
           ¿Es Observado?

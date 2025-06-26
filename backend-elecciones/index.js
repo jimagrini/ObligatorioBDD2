@@ -14,7 +14,9 @@ const authRouter = require('./routes/auth');
 const votosRouter = require('./routes/votos');
 const eleccionesRouter = require('./routes/elecciones');
 const listasRouter = require('./routes/listas');
+const resultadosRouter = require('./routes/resultados');
 
+app.use('/resultados', resultadosRouter);
 app.use('/auth', authRouter);
 app.use('/votos', votosRouter);
 app.use('/elecciones', eleccionesRouter);

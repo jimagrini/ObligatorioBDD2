@@ -5,6 +5,9 @@ import DashboardVotante from './components/DashboardVotante';
 import DashboardFuncionario from './components/DashboardFuncionario';
 import DashboardAdmin from './components/DashboardAdmin';
 import RegisroVoto from './components/RegistroVoto';
+import Resultados from './components/Resultados';
+
+
 
 
 
@@ -18,7 +21,7 @@ function App() {
         <Route path="/admin" element={<DashboardAdmin />} />
         <Route path="*" element={<Navigate to="/" />} />
         <Route path="/registro-voto" element={<RegisroVoto />} />
-
+        <Route path="/resultados" element={<Resultados />} />
       </Routes>
     </Router>
   );
