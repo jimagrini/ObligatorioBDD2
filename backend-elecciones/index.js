@@ -14,6 +14,7 @@ const authRouter = require('./routes/auth');
 const votosRouter = require('./routes/votos');
 const eleccionesRouter = require('./routes/elecciones');
 const listasRouter = require('./routes/listas');
+const circuitosRouter = require('./routes/circuitos');
 const resultadosRouter = require('./routes/resultados');
 
 app.use('/resultados', resultadosRouter);
@@ -21,6 +22,7 @@ app.use('/auth', authRouter);
 app.use('/votos', votosRouter);
 app.use('/elecciones', eleccionesRouter);
 app.use('/listas', listasRouter);
+app.use('/circuitos', circuitosRouter);
 
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {

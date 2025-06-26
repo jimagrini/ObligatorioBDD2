@@ -11,4 +11,61 @@ res.status(500).json({ error: 'Error al obtener listas', detail: error.message }
 }
 }
 
-module.exports = { obtenerListas };
+const insertLista = async (req, res) => {
+  try {
+    const conn = await getConnection();
+    const { numero, nombre_partido } = req.body;
+
+    // Validar que los campos requeridos estén presentes
+    if (!numero || !nombre_partido) {
+      return res.status(400).json({
+        success: false,
+        message: 'Los campos numero y nombre_partido son requeridos'
+      });
+    }
+
+    // Validar que numero sea un entero
+    if (!Number.isInteger(Number(numero))) {
+      return res.status(400).json({
+        success: false,
+        message: 'El campo numero debe ser un entero válido'
+      });
+    }
+
+    // Aquí debes usar tu ORM/biblioteca de base de datos
+    // Ejemplo con consulta SQL directa (ajusta según tu configuración):
+    
+    // Opción 1: Con query SQL directo
+    const query = 'INSERT INTO LISTA (NUMERO, NOMBRE_PARTIDO) VALUES (?, ?)';
+    const result = await conn.query(query, [numero, nombre_partido]);
+    conn.closeSync();
+
+    res.status(201).json({
+      success: true,
+      message: 'Lista creada exitosamente',
+      data: {
+        numero: numero,
+        nombre_partido: nombre_partido
+      }
+    });
+
+  } catch (error) {
+    console.error('Error al insertar lista:', error);
+    
+    // Manejar errores específicos de base de datos
+    if (error.code === 'ER_DUP_ENTRY' || error.code === 23000) {
+      return res.status(409).json({
+        success: false,
+        message: 'Ya existe una lista con ese número'
+      });
+    }
+
+    res.status(500).json({
+      success: false,
+      message: 'Error interno del servidor al crear la lista'
+    });
+  }
+};
+
+
+module.exports = { obtenerListas, insertLista };

@@ -86,4 +86,6 @@ async function obtenerVotos(req, res) {
   }
 }
 
+
+
 module.exports = { registrarVoto, obtenerVotos };

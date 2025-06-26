@@ -13,7 +13,11 @@ registrarVoto
 );
 
 // GET todos los votos - Solo para funcionarios
-router.get('/', verificarToken, verificarRol('FUNCIONARIO'), obtenerVotos);
+router.get('/', 
+verificarToken, 
+verificarRol('FUNCIONARIO'), 
+obtenerVotos
+);
 
 module.exports = router;
 
