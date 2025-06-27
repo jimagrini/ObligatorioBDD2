@@ -1,0 +1,57 @@
+.registro-voto-container {
+  max-width: 500px;
+  margin: 30px auto;
+  padding: 30px;
+  border-radius: 12px;
+  background-color: #f4f4f4;
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.1);
+  font-family: Arial, sans-serif;
+}
+
+.registro-voto-container h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.registro-voto-container form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.registro-voto-container input,
+.registro-voto-container select {
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+}
+
+.checkbox-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+}
+
+.registro-voto-container button {
+  padding: 12px;
+  background-color: #28a745;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.registro-voto-container button:hover {
+  background-color: #218838;
+}
+
+.mensaje {
+  margin-top: 20px;
+  text-align: center;
+  font-weight: bold;
+}
