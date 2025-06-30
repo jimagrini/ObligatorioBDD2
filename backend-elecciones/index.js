@@ -18,7 +18,9 @@ const circuitosRouter = require('./routes/circuitos');
 const resultadosRouter = require('./routes/resultados');
 const funcionarioRouter = require('./routes/funcionario');
 const partidosRouter = require('./routes/partidos');
+const candidatosRouter = require('./routes/candidatos');
 
+app.use('/candidatos', candidatosRouter);
 app.use('/partidos', partidosRouter);
 app.use('/funcionario', funcionarioRouter);
 app.use('/resultados', resultadosRouter);
