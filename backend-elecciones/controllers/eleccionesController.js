@@ -117,18 +117,50 @@ async function obtenerCircuitosPorEleccion(req, res) {
 }
 
 async function obtenerVotosPorCircuito(req, res) {
+  const { idEleccion } = req.params;
+
+  try {
+    const conn = await getConnection();
+
+    const result = await conn.query(`
+      SELECT 
+        V.num_circuito,
+        C.cerrado,
+        SUM(CASE WHEN V.condicion = 'VALIDO' THEN 1 ELSE 0 END) AS validos,
+        SUM(CASE WHEN V.condicion = 'ANULADO' THEN 1 ELSE 0 END) AS anulados,
+        SUM(CASE WHEN V.esObservado = 1 THEN 1 ELSE 0 END) AS observados,
+        COUNT(*) AS total
+      FROM VOTO V
+      JOIN CIRCUITO C ON V.num_circuito = C.num_circuito
+      WHERE V.id_eleccion = ?
+      GROUP BY V.num_circuito, C.cerrado
+      ORDER BY V.num_circuito
+    `, [idEleccion]);
+
+    res.json(result);
+  } catch (error) {
+    res.status(500).json({
+      error: 'Error al obtener votos por circuito',
+      detalle: error.message
+    });
+  }
+}
+
+async function obtenerResultadosTotalesEleccion(req, res) {
 const { idEleccion } = req.params;
 try {
 const conn = await getConnection();
-const result = await conn.query(`SELECT V.num_circuito, SUM(CASE WHEN V.condicion = 'válido' THEN 1 ELSE 0 END) AS validos, SUM(CASE WHEN V.condicion = 'anulado' THEN 1 ELSE 0 END) AS anulados, SUM(CASE WHEN V.condicion = 'observado' THEN 1 ELSE 0 END) AS observados, COUNT(*) AS total FROM VOTO V WHERE V.id_eleccion = ? GROUP BY V.num_circuito ORDER BY V.num_circuito`, [idEleccion]);
-
+const result = await conn.query( 'SELECT V.ID_ELECCION, V.NUMERO_LISTA AS NUMERO_LISTA, L.NOMBRE_PARTIDO AS NOMBRE_PARTIDO, COUNT(*) AS TOTAL_VOTOS FROM VOTO V JOIN LISTA L ON V.NUMERO_LISTA = L.NUMERO WHERE V.ID_ELECCION = ? GROUP BY V.ID_ELECCION, V.NUMERO_LISTA, L.NOMBRE_PARTIDO ORDER BY TOTAL_VOTOS DESC' , [idEleccion]);
+conn.closeSync();
 res.json(result);
 } catch (error) {
-res.status(500).json({ error: 'Error al obtener votos por circuito', detalle: error.message });
+res.status(500).json({ error: 'Error al obtener resultados de la elección', detalle: error.message });
 }
 }
 
 
 
-module.exports = { obtenerElecciones, insertarEleccion, obtenerCircuitosPorEleccion, obtenerVotosPorCircuito };
+
+
+module.exports = { obtenerElecciones, insertarEleccion, obtenerCircuitosPorEleccion, obtenerVotosPorCircuito, obtenerResultadosTotalesEleccion};
 
