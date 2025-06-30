@@ -67,5 +67,27 @@ const insertLista = async (req, res) => {
   }
 };
 
+const eliminarLista = async (req, res) => {
+const { numero } = req.params;
 
-module.exports = { obtenerListas, insertLista };
+try {
+const conn = await getConnection();
+// Verificar que la lista existe
+const [existe] = await conn.query('SELECT 1 FROM LISTA WHERE NUMERO = ?', [numero]);
+if (!existe) {
+  conn.closeSync();
+  return res.status(404).json({ error: 'Lista no encontrada' });
+}
+
+// Eliminar la lista
+await conn.query('DELETE FROM LISTA WHERE NUMERO = ?', [numero]);
+conn.closeSync();
+
+res.json({ success: true, message: 'Lista eliminada correctamente' });
+} catch (error) {
+res.status(500).json({ error: 'Error al eliminar lista', detail: error.message });
+}
+};
+
+
+module.exports = { obtenerListas, insertLista, eliminarLista};

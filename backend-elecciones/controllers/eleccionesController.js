@@ -95,6 +95,40 @@ const insertarEleccion = async (req, res) => {
   }
 };
 
+async function obtenerCircuitosPorEleccion(req, res) {
+  const { idEleccion } = req.params;
 
-module.exports = { obtenerElecciones, insertarEleccion };
+  try {
+    const conn = await getConnection();
+    const result = await conn.query(`
+      SELECT DISTINCT C.NUM_CIRCUITO, E.DIRECCION, Z.CIUDAD, Z.DEPARTAMENTO
+      FROM VOTO V
+      JOIN CIRCUITO C ON V.NUM_CIRCUITO = C.NUM_CIRCUITO
+      JOIN ESTABLECIMIENTO E ON C.ID_ESTABLECIMIENTO = E.ID
+      JOIN ZONA Z ON E.ID_ZONA = Z.ID
+      WHERE V.ID_ELECCION = ?
+    `, [idEleccion]);
+
+    conn.closeSync();
+    res.json(result);
+  } catch (error) {
+    res.status(500).json({ error: 'Error al obtener circuitos', detalle: error.message });
+  }
+}
+
+async function obtenerVotosPorCircuito(req, res) {
+const { idEleccion } = req.params;
+try {
+const conn = await getConnection();
+const result = await conn.query(`SELECT V.num_circuito, SUM(CASE WHEN V.condicion = 'válido' THEN 1 ELSE 0 END) AS validos, SUM(CASE WHEN V.condicion = 'anulado' THEN 1 ELSE 0 END) AS anulados, SUM(CASE WHEN V.condicion = 'observado' THEN 1 ELSE 0 END) AS observados, COUNT(*) AS total FROM VOTO V WHERE V.id_eleccion = ? GROUP BY V.num_circuito ORDER BY V.num_circuito`, [idEleccion]);
+
+res.json(result);
+} catch (error) {
+res.status(500).json({ error: 'Error al obtener votos por circuito', detalle: error.message });
+}
+}
+
+
+
+module.exports = { obtenerElecciones, insertarEleccion, obtenerCircuitosPorEleccion, obtenerVotosPorCircuito };
 
