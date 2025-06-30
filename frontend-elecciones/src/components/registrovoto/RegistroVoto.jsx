@@ -17,7 +17,7 @@ export default function RegistroVoto() {
     if (!token) return;
 
     // Obtener elecciones
-    fetch('http://localhost:3001/elecciones', {
+    fetch('http://localhost:3001/elecciones/', {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then((res) => res.json())
@@ -41,7 +41,7 @@ export default function RegistroVoto() {
       return;
     }
     console.log({ ci, idEleccion, numeroLista, condicion, esObservado });
-    const res = await fetch('http://localhost:3001/votos', {
+    const res = await fetch('http://localhost:3001/votos/registrarVoto', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
