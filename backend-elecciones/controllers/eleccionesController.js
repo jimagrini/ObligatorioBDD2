@@ -150,17 +150,48 @@ async function obtenerResultadosTotalesEleccion(req, res) {
 const { idEleccion } = req.params;
 try {
 const conn = await getConnection();
-const result = await conn.query( 'SELECT V.ID_ELECCION, V.NUMERO_LISTA AS NUMERO_LISTA, L.NOMBRE_PARTIDO AS NOMBRE_PARTIDO, COUNT(*) AS TOTAL_VOTOS FROM VOTO V JOIN LISTA L ON V.NUMERO_LISTA = L.NUMERO WHERE V.ID_ELECCION = ? GROUP BY V.ID_ELECCION, V.NUMERO_LISTA, L.NOMBRE_PARTIDO ORDER BY TOTAL_VOTOS DESC' , [idEleccion]);
+const result = await conn.query('SELECT V.ID_ELECCION, V.NUMERO_LISTA, L.NOMBRE_PARTIDO, COUNT(*) AS TOTAL_VOTOS FROM VOTO V JOIN LISTA L ON V.NUMERO_LISTA = L.NUMERO WHERE V.ID_ELECCION = ? GROUP BY V.ID_ELECCION, V.NUMERO_LISTA, L.NOMBRE_PARTIDO ORDER BY TOTAL_VOTOS DESC' , [idEleccion]);
+
+
+// Calcular total general
+const totalGeneral = result.reduce((acc, r) => acc + parseInt(r.TOTAL_VOTOS), 0);
+
+// Agregar porcentaje a cada fila
+const resultadosConPorcentaje = result.map(r => ({
+  ...r,
+  PORCENTAJE: totalGeneral > 0 ? ((r.TOTAL_VOTOS / totalGeneral) * 100).toFixed(2) : '0.00'
+}));
+
+const ganador = resultadosConPorcentaje[0] || null;
+
 conn.closeSync();
-res.json(result);
+
+res.json({
+  total: totalGeneral,
+  ganador,
+  resultados: resultadosConPorcentaje
+});
 } catch (error) {
 res.status(500).json({ error: 'Error al obtener resultados de la elección', detalle: error.message });
 }
 }
 
+async function obtenerVotosDeCircuito(req, res) {
+const { idEleccion, numCircuito } = req.params;
+try {
+const conn = await getConnection();
+const result = await conn.query( `SELECT V.num_circuito, SUM(CASE WHEN V.condicion = 'VALIDO' THEN 1 ELSE 0 END) AS validos, SUM(CASE WHEN V.condicion = 'ANULADO' THEN 1 ELSE 0 END) AS anulados, SUM(CASE WHEN V.esObservado = true THEN 1 ELSE 0 END) AS observados, COUNT(*) AS total, C.cerrado FROM VOTO V JOIN CIRCUITO C ON V.num_circuito = C.num_circuito WHERE V.id_eleccion = ? AND V.num_circuito = ? GROUP BY V.num_circuito, C.cerrado`, [idEleccion, numCircuito]);
+
+
+conn.closeSync();
+res.json(result[0] || {});
+} catch (error) {
+res.status(500).json({ error: 'Error al obtener resultados del circuito', detalle: error.message });
+}
+}
 
 
 
 
-module.exports = { obtenerElecciones, insertarEleccion, obtenerCircuitosPorEleccion, obtenerVotosPorCircuito, obtenerResultadosTotalesEleccion};
+module.exports = { obtenerElecciones, insertarEleccion, obtenerCircuitosPorEleccion, obtenerVotosPorCircuito, obtenerResultadosTotalesEleccion, obtenerVotosDeCircuito};
 

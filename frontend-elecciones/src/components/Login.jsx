@@ -31,6 +31,7 @@ export default function Login() {
 
   return (
     <div className="p-6 max-w-md mx-auto">
+      <h1 className="text-2xl font-bold mb-4">Bienvenido al sistema electoral</h1>
       <h2 className="text-2xl font-bold mb-4">Iniciar Sesión</h2>
       <form onSubmit={handleSubmit} className="flex flex-col gap-3">
         <input value={username} onChange={e => setUsername(e.target.value)} placeholder="Usuario" className="border p-2" />
