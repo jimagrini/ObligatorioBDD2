@@ -151,6 +151,7 @@ export default function DashboardAdmin() {
                         <p>👁 Observados: {resultadosPorCircuito[c.NUM_CIRCUITO].OBSERVADOS || 0}</p>
                         <p>🧾 Total: {resultadosPorCircuito[c.NUM_CIRCUITO].TOTAL || 0}</p>
                         <p>📦 Estado: {resultadosPorCircuito[c.NUM_CIRCUITO].CERRADO ? 'Cerrado' : 'Abierto'}</p>
+
                         {resultadosPorCircuito[c.NUM_CIRCUITO].GANADOR && (
                           <div className='mt-2 p-2 border-t pt-2'>
                             <p className='text-green-700 font-medium'>
@@ -158,6 +159,30 @@ export default function DashboardAdmin() {
                               {resultadosPorCircuito[c.NUM_CIRCUITO].GANADOR.NOMBRE_PARTIDO}) con{' '}
                               {resultadosPorCircuito[c.NUM_CIRCUITO].GANADOR.PORCENTAJE}%
                             </p>
+                          </div>
+                        )}
+
+                        {Array.isArray(resultadosPorCircuito[c.NUM_CIRCUITO].LISTAS) && (
+                          <div className='mt-3'>
+                            <h4 className='font-semibold mb-1'>🗳 Votos por Lista:</h4>
+                            <table className='w-full border border-collapse text-sm'>
+                              <thead className='bg-gray-100'>
+                                <tr>
+                                  <th className='border px-2 py-1'>Lista</th>
+                                  <th className='border px-2 py-1'>Partido</th>
+                                  <th className='border px-2 py-1'>Votos</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                {resultadosPorCircuito[c.NUM_CIRCUITO].LISTAS.map((lista, idx) => (
+                                  <tr key={idx}>
+                                    <td className='border px-2 py-1 text-center'>{lista.NUMERO_LISTA}</td>
+                                    <td className='border px-2 py-1 text-center'>{lista.NOMBRE_PARTIDO}</td>
+                                    <td className='border px-2 py-1 text-center'>{lista.VOTOS}</td>
+                                  </tr>
+                                ))}
+                              </tbody>
+                            </table>
                           </div>
                         )}
                       </div>
@@ -171,14 +196,11 @@ export default function DashboardAdmin() {
           {eleccionSeleccionada && resultadosTotales.resultados.length > 0 && (
             <div className='bg-white p-4 border rounded shadow mt-6'>
               <h3 className='text-lg font-bold mb-2'>Resultados Totales de la Elección</h3>
-
               {resultadosTotales.ganador && (
                 <div className='mb-4 p-2 bg-green-50 border border-green-200 rounded'>
-                  🏆 Ganador: Lista {resultadosTotales.ganador.NUMERO_LISTA} (
-                  {resultadosTotales.ganador.NOMBRE_PARTIDO}) con {resultadosTotales.ganador.PORCENTAJE}%
+                  🏆 Ganador: Lista {resultadosTotales.ganador.NUMERO_LISTA} ({resultadosTotales.ganador.NOMBRE_PARTIDO}) con {resultadosTotales.ganador.PORCENTAJE}%
                 </div>
               )}
-
               <table className='table-auto w-full border border-collapse'>
                 <thead className='bg-gray-200'>
                   <tr>
@@ -206,5 +228,6 @@ export default function DashboardAdmin() {
     </div>
   );
 }
+
 
 
