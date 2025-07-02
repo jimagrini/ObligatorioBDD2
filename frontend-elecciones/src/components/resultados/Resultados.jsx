@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import './Resultados.css';
 
 export default function ResultadosEleccion({ idEleccion }) {
 const [resultados, setResultados] = useState([]);
@@ -20,23 +21,23 @@ fetch(`http://localhost:3001/resultados/${idEleccion}`, {
 }, [idEleccion, token]);
 
 return (
-<div className="p-4 border rounded mt-4">
-<h3 className="text-lg font-bold mb-2">Resultados Totales de la Elección</h3>
-{mensaje && <p className="text-red-600">{mensaje}</p>}
-<table className="w-full border mt-2">
-<thead className="bg-gray-100">
+<div className="resultados-container">
+<h3 className="resultados-titulo">Resultados Totales de la Elección</h3>
+{mensaje && <p className="resultados-error">{mensaje}</p>}
+<table className="tabla-resultados">
+<thead>
 <tr>
-<th className="border px-2 py-1">Lista</th>
-<th className="border px-2 py-1">Partido</th>
-<th className="border px-2 py-1">Votos</th>
+<th>Lista</th>
+<th>Partido</th>
+<th>Votos</th>
 </tr>
 </thead>
 <tbody>
 {resultados.map((r, idx) => (
 <tr key={idx}>
-<td className="border px-2 py-1">{r.NUMERO_LISTA}</td>
-<td className="border px-2 py-1">{r.NOMBRE_PARTIDO}</td>
-<td className="border px-2 py-1">{r.TOTAL_VOTOS}</td>
+<td>{r.NUMERO_LISTA}</td>
+<td>{r.NOMBRE_PARTIDO}</td>
+<td>{r.TOTAL_VOTOS}</td>
 </tr>
 ))}
 </tbody>
@@ -44,4 +45,3 @@ return (
 </div>
 );
 }
-

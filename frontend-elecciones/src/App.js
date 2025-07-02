@@ -8,7 +8,7 @@ import {
 import Login from './components/Login';
 import DashboardVotante from './components/DashboardVotante';
 import DashboardFuncionario from './components/DashboardFuncionario';
-import DashboardAdmin from './components/DashboardAdmin';
+import DashboardAdmin from './components/DashboardAdmin/DashboardAdmin';
 import RegistroVoto from './components/registrovoto/RegistroVoto';
 import RegistroCiudadano from './components/registrociudadano/RegistroCiudadano';
 import Resultados from './components/resultados/Resultados';
