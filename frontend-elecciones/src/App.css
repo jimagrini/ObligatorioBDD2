@@ -1,38 +1,63 @@
+body {
+margin: 0;
+font-family: 'Segoe UI', 'Roboto', 'Helvetica Neue', sans-serif;
+background-color: #f0f2f5;
+color: #1a202c;
+line-height: 1.5;
+}
+
+/* Layout general */
 .App {
-  text-align: center;
+text-align: center;
+min-height: 100vh;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+/* Enlaces */
+a {
+color: #3182ce;
+text-decoration: none;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+a:hover {
+text-decoration: underline;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+/* Tablas base */
+table {
+width: 100%;
+border-collapse: collapse;
 }
 
-.App-link {
-  color: #61dafb;
+th, td {
+padding: 0.5rem;
+border: 1px solid #e2e8f0;
+text-align: left;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+/* Botones base (puede ser sobrescrito por clases específicas) */
+button {
+cursor: pointer;
+font-family: inherit;
+}
+
+/* Mensajes generales */
+.success-message {
+color: #38a169;
+font-weight: 500;
+}
+
+.error-message {
+color: #e53e3e;
+font-weight: 500;
+}
+
+/* Animación de aparición sutil */
+@keyframes fadeIn {
+from { opacity: 0; transform: translateY(10px); }
+to { opacity: 1; transform: translateY(0); }
+}
+
+/* Animación reutilizable */
+.fade-in {
+animation: fadeIn 0.3s ease-in-out;
 }

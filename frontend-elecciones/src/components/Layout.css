@@ -1,0 +1,51 @@
+.layout-header {
+background-color: #20232a;
+color: white;
+padding: 12px 24px;
+display: flex;
+justify-content: space-between;
+align-items: center;
+position: sticky;
+top: 0;
+z-index: 100;
+}
+
+.logo {
+font-size: 1.5rem;
+cursor: pointer;
+}
+
+.user-info {
+display: flex;
+align-items: center;
+gap: 12px;
+}
+
+.username {
+font-weight: 500;
+}
+
+.logout-btn {
+background-color: #e53935;
+color: white;
+border: none;
+padding: 6px 12px;
+border-radius: 6px;
+cursor: pointer;
+transition: background-color 0.2s ease-in-out;
+}
+
+.logout-btn:hover {
+background-color: #c62828;
+}
+
+.username {
+font-weight: 500;
+}
+
+.rol {
+font-weight: 400;
+font-style: italic;
+margin-left: 4px;
+color: #bbb;
+}
