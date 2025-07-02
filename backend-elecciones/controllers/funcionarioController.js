@@ -5,6 +5,7 @@ try {
 const funcionarioCI = req.user.ci;
 const conn = await getConnection();
 
+// Obtener el circuito asignado al funcionario
 const result = await conn.query(
   'SELECT num_circuito FROM FUNCIONARIO WHERE ci = ?',
   [funcionarioCI]
@@ -16,16 +17,16 @@ if (result.length === 0 || !result[0].NUM_CIRCUITO) {
 
 const circuito = result[0].NUM_CIRCUITO;
 
-// Obtener total de votos por condición
+// Votos no observados agrupados por condición (VALIDO, ANULADO, etc.)
 const condiciones = await conn.query(
   `SELECT condicion, COUNT(*) as cantidad
    FROM VOTO
-   WHERE num_circuito = ?
+   WHERE num_circuito = ? AND esObservado = 0
    GROUP BY condicion`,
   [circuito]
 );
 
-// Obtener total de votos observados
+// Total de votos observados (sin importar la condición)
 const observados = await conn.query(
   `SELECT COUNT(*) as cantidad
    FROM VOTO
@@ -33,7 +34,7 @@ const observados = await conn.query(
   [circuito]
 );
 
-// Obtener votos por lista y partido
+// Votos por lista y partido (tanto observados como no observados)
 const porLista = await conn.query(
   `SELECT L.numero AS numero_lista, P.nombre AS partido, COUNT(*) as cantidad
    FROM VOTO V
@@ -45,7 +46,7 @@ const porLista = await conn.query(
   [circuito]
 );
 
-// Obtener total
+// Total general de votos
 const total = await conn.query(
   `SELECT COUNT(*) as total FROM VOTO WHERE num_circuito = ?`,
   [circuito]

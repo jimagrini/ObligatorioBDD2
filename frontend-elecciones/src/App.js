@@ -5,9 +5,9 @@ import {
   Route,
   Navigate,
 } from 'react-router-dom';
-import Login from './components/Login';
-import DashboardVotante from './components/DashboardVotante';
-import DashboardFuncionario from './components/DashboardFuncionario';
+import Login from './components/Login/Login';
+import DashboardVotante from './components/DashboardCiudadano/DashboardVotante';
+import DashboardFuncionario from './components/DashboardFuncionario/DashboardFuncionario';
 import DashboardAdmin from './components/DashboardAdmin/DashboardAdmin';
 import RegistroVoto from './components/registrovoto/RegistroVoto';
 import RegistroCiudadano from './components/registrociudadano/RegistroCiudadano';

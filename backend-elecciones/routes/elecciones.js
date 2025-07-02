@@ -11,5 +11,5 @@ router.get('/:idEleccion/circuitos', verificarToken, verificarRol('ADMIN'), obte
 router.get('/:idEleccion/circuitos/votos', verificarToken, verificarRol('ADMIN'), obtenerVotosPorCircuito);
 
 router.get('/:idEleccion/resultados', verificarToken, verificarRol('ADMIN'), obtenerResultadosTotalesEleccion);
-router.get('/:idEleccion/circuitos/:numCircuito/votos', verificarToken, verificarRol('ADMIN'), obtenerVotosDeCircuito);
+router.get('/:idEleccion/circuitos/:numCircuito/votos', verificarToken,  obtenerVotosDeCircuito);
 module.exports = router;

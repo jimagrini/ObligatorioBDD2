@@ -1,0 +1,82 @@
+.funcionario-dashboard {
+max-width: 600px;
+margin: 0 auto;
+padding: 1rem;
+background: #fff;
+border-radius: 8px;
+}
+
+.dashboard-title {
+font-size: 1.5rem;
+font-weight: bold;
+margin-bottom: 1rem;
+}
+
+.resumen-box {
+background: #f9f9f9;
+border: 1px solid #ccc;
+padding: 1rem;
+margin-bottom: 1rem;
+border-radius: 4px;
+}
+
+.resumen-box ul {
+list-style-type: none;
+padding-left: 0;
+}
+
+.resumen-box li {
+margin-bottom: 0.5rem;
+}
+
+.subtitulo {
+font-size: 1.2rem;
+font-weight: 600;
+margin: 1rem 0 0.5rem;
+}
+
+.lista-votos {
+list-style-type: disc;
+padding-left: 1.5rem;
+margin-bottom: 1rem;
+}
+
+.botones {
+display: flex;
+flex-direction: column;
+gap: 0.75rem;
+margin-top: 1rem;
+}
+
+.btn {
+border: none;
+padding: 0.5rem 1rem;
+color: white;
+cursor: pointer;
+font-weight: bold;
+border-radius: 4px;
+}
+
+.btn-verde {
+background-color: #2f855a;
+}
+
+.btn-rojo {
+background-color: #c53030;
+}
+
+.mensaje-final {
+margin-top: 1rem;
+font-weight: 600;
+color: #2c5282;
+}
+
+.error-text {
+color: red;
+padding: 1rem;
+}
+
+.loading-text {
+padding: 1rem;
+color: #666;
+}
