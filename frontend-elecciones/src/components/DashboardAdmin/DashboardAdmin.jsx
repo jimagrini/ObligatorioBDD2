@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import AdminPartidos from '../partidos/AdminPartidos';
 import AdminListas from '../listas/AdminListas';
 import AdminCandidatos from '../candidatos/AdminCandidatos';
@@ -14,6 +14,8 @@ const [eleccionSeleccionada, setEleccionSeleccionada] = useState(null);
 const [showListas, setShowListas] = useState(false);
 const [showPartidos, setShowPartidos] = useState(false);
 const [showCandidatos, setShowCandidatos] = useState(false);
+const resultadosRef = useRef(null);
+const circuitosRef = useRef(null);
 
 const token = localStorage.getItem('token');
 
@@ -25,6 +27,18 @@ headers: { Authorization: `Bearer ${token}` }
 .then(data => setElecciones(data))
 .catch(err => console.error('Error al obtener elecciones:', err));
 }, [token]);
+
+useEffect(() => {
+  if (resultadosTotales.resultados.length > 0 && resultadosRef.current) {
+    resultadosRef.current.scrollIntoView({ behavior: 'smooth' });
+  }
+}, [resultadosTotales]);
+
+useEffect(() => {
+  if (circuitos.length > 0 && circuitosRef.current) {
+    circuitosRef.current.scrollIntoView({ behavior: 'smooth' });
+  }
+}, [circuitos]);
 
 const handleEliminarEleccion = async (id) => {
 if (!window.confirm(`¿Estás seguro que deseas eliminar la elección con ID ${id}?`)) return;
@@ -46,6 +60,7 @@ alert('❌ Error inesperado al eliminar la elección');
 };
 
 const handleVerCircuitos = async (idEleccion) => {
+console.log('Ver circuitos para ID:', idEleccion);
 setEleccionSeleccionada(idEleccion);
 setResultadosTotales({ total: 0, ganador: null, resultados: [] });
 setResultadosPorCircuito({});
@@ -56,6 +71,9 @@ headers: { Authorization: `Bearer ${token}` }
 const data = await res.json();
 if (res.ok) {
 setCircuitos(data);
+if (circuitosRef.current) {
+  circuitosRef.current.scrollIntoView({ behavior: 'smooth' });
+}
 } else {
 alert('❌ Error al obtener circuitos');
 }
@@ -66,12 +84,16 @@ alert('❌ Error al cargar circuitos');
 
 const handleVerResultadosTotales = async (idEleccion) => {
 try {
+console.log('Ver resultados para ID:', idEleccion);
 const res = await fetch(`http://localhost:3001/elecciones/${idEleccion}/resultados`, {
 headers: { Authorization: `Bearer ${token}` }
 });
 const data = await res.json();
 if (res.ok) {
 setResultadosTotales(data);
+if (resultadosRef.current) {
+  resultadosRef.current.scrollIntoView({ behavior: 'smooth' });
+}
 setCircuitos([]);
 setResultadosPorCircuito({});
 setEleccionSeleccionada(idEleccion);
@@ -140,7 +162,7 @@ return (
 
         {/* Circuitos */}
         {eleccionSeleccionada && circuitos.length > 0 && (
-          <div className="resultados-circuitos">
+          <div className="resultados-circuitos" ref={circuitosRef}>
             <h3>Circuitos para elección ID: {eleccionSeleccionada}</h3>
             <ul>
               {circuitos.map((c, i) => (
@@ -193,7 +215,7 @@ return (
 
         {/* Resultados Totales */}
         {eleccionSeleccionada && resultadosTotales.resultados.length > 0 && (
-          <div className="resultados-totales">
+          <div className="resultados-totales" ref={resultadosRef}>
             <h3>Resultados Totales de la Elección</h3>
             {resultadosTotales.ganador && (
               <p className="ganador">
