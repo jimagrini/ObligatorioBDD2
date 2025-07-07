@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { registrarCiudadano, obtenerCiudadanos } = require('../controllers/ciudadanoController');
+const { registrarCiudadano, obtenerCiudadanos } = require('../controllers/ciudadanosController');
 
 router.post('/ciudadanos', registrarCiudadano);
 router.get('/ciudadanos', obtenerCiudadanos);
