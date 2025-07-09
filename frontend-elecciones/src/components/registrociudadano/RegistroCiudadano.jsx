@@ -40,7 +40,7 @@ function RegistroCiudadano() {
             value={nombre}
             onChange={(e) => setNombre(e.target.value)}
             required
-            placeholder='Ej: Juan Pérez'
+            placeholder='Ej: juan mcgreen'
           />
         </div>
 
