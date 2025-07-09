@@ -249,7 +249,7 @@ return (
             <h3>Resultados Totales de la Elección</h3>
             {resultadosTotales.ganador && (
               <p className="ganador">
-                🏆 Ganador: Lista {resultadosTotales.ganador.NUMERO_LISTA} ({resultadosTotales.ganador.NOMBRE_PARTIDO}) con {resultadosTotales.ganador.PORCENTAJE}%
+                🏆 Ganador: {resultadosTotales.ganador.NOMBRE_PRESIDENTE} - Lista {resultadosTotales.ganador.NUMERO_LISTA} ({resultadosTotales.ganador.NOMBRE_PARTIDO}) con {resultadosTotales.ganador.PORCENTAJE}%
               </p>
             )}
             <table className="tabla-listas">
@@ -279,54 +279,63 @@ return (
   </div>
 
   {mostrarFormulario && (
-<div className="modal-overlay"> <div className="modal"> <h3>Nueva Elección</h3> <form onSubmit={crearEleccion} className="form-eleccion"> <input type="number" placeholder="ID de Elección" value={nuevaEleccion.id_eleccion} onChange={(e) => setNuevaEleccion({ ...nuevaEleccion, id_eleccion: e.target.value, }) } required />
-
-    <input
-      type="date"
-      placeholder="Fecha de Realización"
-      value={nuevaEleccion.fecha_realizacion}
-      onChange={(e) =>
-        setNuevaEleccion({
-          ...nuevaEleccion,
-          fecha_realizacion: e.target.value,
-        })
-      }
-      required
-    />
-
-    <select
-      value={nuevaEleccion.tipo_eleccion}
-      onChange={(e) =>
-        setNuevaEleccion({
-          ...nuevaEleccion,
-          tipo_eleccion: e.target.value,
-        })
-      }
-      required
-    >
-      <option value="">Seleccionar tipo</option>
-      {tiposValidos.map((tipo) => (
-        <option key={tipo} value={tipo}>
-          {tipo}
-        </option>
-      ))}
-    </select>
-
-    <div className="form-buttons">
-      <button type="submit" className="btn btn-verde">
-        Crear
-      </button>
-      <button
-        type="button"
-        className="btn btn-rojo"
-        onClick={() => setMostrarFormulario(false)}
-      >
-        Cancelar
-      </button>
+  <div className="modal-overlay">
+    <div className="modal">
+      <h3>Nueva Elección</h3>
+      <form onSubmit={crearEleccion} className="form-eleccion">
+        <input
+          type="number"
+          placeholder="ID de Elección"
+          value={nuevaEleccion.id_eleccion}
+          onChange={(e) =>
+            setNuevaEleccion({ ...nuevaEleccion, id_eleccion: e.target.value })
+          }
+          required
+        />
+        <input
+          type="date"
+          placeholder="Fecha de Realización"
+          value={nuevaEleccion.fecha_realizacion}
+          onChange={(e) =>
+            setNuevaEleccion({
+              ...nuevaEleccion,
+              fecha_realizacion: e.target.value,
+            })
+          }
+          required
+        />
+        <select
+          value={nuevaEleccion.tipo_eleccion}
+          onChange={(e) =>
+            setNuevaEleccion({
+              ...nuevaEleccion,
+              tipo_eleccion: e.target.value,
+            })
+          }
+          required
+        >
+          <option value="">Seleccionar tipo</option>
+          {tiposValidos.map((tipo) => (
+            <option key={tipo} value={tipo}>
+              {tipo}
+            </option>
+          ))}
+        </select>
+        <div className="form-buttons">
+          <button type="submit" className="btn btn-verde">Crear</button>
+          <button
+            type="button"
+            className="btn btn-rojo"
+            onClick={() => setMostrarFormulario(false)}
+          >
+            Cancelar
+          </button>
+        </div>
+      </form>
     </div>
-  </form>
-</div>
-</div> )}
+  </div>
+)}
+
 </Layout>
 );
 }

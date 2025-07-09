@@ -64,24 +64,51 @@ res.status(500).json({ error: 'Error al obtener votos por circuito', detalle: er
 }
 }
 
-// 5. Resultados totales de una elección
 async function obtenerResultadosTotalesEleccion(req, res) {
 const { idEleccion } = req.params;
 try {
 const conn = await getConnection();
-const result = await conn.query( `SELECT V.ID_ELECCION, V.NUMERO_LISTA, L.NOMBRE_PARTIDO, COUNT(*) AS TOTAL_VOTOS FROM VOTO V JOIN LISTA L ON V.NUMERO_LISTA = L.NUMERO WHERE V.ID_ELECCION = ? AND V.condicion = 'VALIDO' GROUP BY V.ID_ELECCION, V.NUMERO_LISTA, L.NOMBRE_PARTIDO ORDER BY TOTAL_VOTOS DESC` , [idEleccion]);
-
+// 1. Obtener resultados por lista con nombre del partido
+const result = await conn.query(`
+  SELECT 
+    V.ID_ELECCION,
+    V.NUMERO_LISTA,
+    L.NOMBRE_PARTIDO,
+    COUNT(*) AS TOTAL_VOTOS
+  FROM VOTO V
+  JOIN LISTA L ON V.NUMERO_LISTA = L.NUMERO
+  WHERE V.ID_ELECCION = ? AND V.condicion = 'VALIDO'
+  GROUP BY V.ID_ELECCION, V.NUMERO_LISTA, L.NOMBRE_PARTIDO
+  ORDER BY TOTAL_VOTOS DESC
+`, [idEleccion]);
 
 const total = result.reduce((acc, r) => acc + Number(r.TOTAL_VOTOS), 0);
+
 const resultados = result.map(r => ({
   ...r,
   PORCENTAJE: total > 0 ? ((r.TOTAL_VOTOS / total) * 100).toFixed(2) : '0.00'
 }));
 
-const ganador = resultados[0] || null;
+let ganador = resultados[0] || null;
+
+// 2. Si hay ganador, obtener el nombre del presidente del partido
+if (ganador) {
+  const [presidenteResult] = await conn.query(`
+    SELECT C.NOMBRE AS NOMBRE_PRESIDENTE
+    FROM PARTIDO P
+    JOIN CIUDADANO C ON P.CI_PRESIDENTE = C.CI
+    WHERE P.NOMBRE = ?
+  `, [ganador.NOMBRE_PARTIDO]);
+
+  if (presidenteResult && presidenteResult.NOMBRE_PRESIDENTE) {
+    ganador.NOMBRE_PRESIDENTE = presidenteResult.NOMBRE_PRESIDENTE;
+  }
+}
+
 conn.closeSync();
 res.json({ total, ganador, resultados });
 } catch (error) {
+console.error('Error al obtener resultados:', error);
 res.status(500).json({ error: 'Error al obtener resultados de la elección', detalle: error.message });
 }
 }
