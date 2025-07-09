@@ -43,7 +43,7 @@ export default function DashboardVotante() {
       headers: { Authorization: `Bearer ${token}` }
     })
       .then(res => res.json())
-      .then(data => setListas(data))
+      .then(data => setListas(data.filter(l => l.NOMBRE_PARTIDO === partidoSeleccionado)))
       .catch(() => setMensaje('❌ Error al cargar listas del partido'));
   }, [partidoSeleccionado, eleccionSeleccionada, token]);
 
@@ -57,14 +57,6 @@ export default function DashboardVotante() {
     e.preventDefault();
     setMensaje('');
 
-    // Verificar si la lista seleccionada pertenece al partido seleccionado
-    const listaPerteneceAlPartido = listas.some(
-      (l) => l.NOMBRE_PARTIDO === partidoSeleccionado && l.NUMERO === listaSeleccionada
-    );
-
-    // Si no pertenece, marcar el voto como ANULADO
-    const condicion = listaPerteneceAlPartido ? 'VALIDO' : 'ANULADO';
-
     try {
       const res = await fetch('http://localhost:3001/votos/registrar', {
         method: 'POST',
@@ -75,7 +67,7 @@ export default function DashboardVotante() {
         body: JSON.stringify({
           id_eleccion: eleccionSeleccionada,
           numero_lista: listaSeleccionada || null,
-          condicion: condicion,
+          condicion: listaSeleccionada ? 'VALIDO' : 'BLANCO',
         })
       });
 
