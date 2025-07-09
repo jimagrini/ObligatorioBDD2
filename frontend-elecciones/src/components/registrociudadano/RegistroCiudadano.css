@@ -21,14 +21,14 @@
 }
 
 .registro-ciudadano-container label {
-  display: block;
-  margin-bottom: 5px;
-  color: #555;
   font-size: 14px;
   font-weight: bold;
+  color: #555;
+  margin-bottom: 5px;
 }
 
-.registro-ciudadano-container input {
+.registro-ciudadano-container input,
+.registro-ciudadano-container select {
   padding: 10px;
   font-size: 16px;
   border: 1px solid #ccc;
@@ -37,9 +37,16 @@
   box-sizing: border-box;
 }
 
+.registro-ciudadano-container .checkbox-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+}
+
 .registro-ciudadano-container button {
   padding: 12px;
-  background-color: #007bff;
+  background-color: #28a745; 
   color: white;
   border: none;
   border-radius: 8px;
@@ -49,7 +56,7 @@
 }
 
 .registro-ciudadano-container button:hover {
-  background-color: #0056b3;
+  background-color: #218838;
 }
 
 .mensaje {
@@ -58,4 +65,3 @@
   font-weight: bold;
   color: #155724;
 }
-
