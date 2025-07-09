@@ -10,9 +10,18 @@ function RegistroCiudadano() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const data = { ci, nombre, fecha_nac: fechaNac };
+    const res = await fetch('http://localhost:3001/ciudadanos/registrar-ciudadano', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(
+          data
+        )
+      })
 
     console.log('Datos que se enviarían:', data);
-    setMensaje('✅ Ciudadano registrado con éxito (MODO PRUEBA)');
+    setMensaje('✅ Ciudadano registrado con éxito');
     setCi('');
     setNombre('');
     setFechaNac('');

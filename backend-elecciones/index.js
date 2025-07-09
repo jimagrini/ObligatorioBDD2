@@ -21,7 +21,7 @@ const partidosRouter = require('./routes/partidos');
 const candidatosRouter = require('./routes/candidatos');
 const ciudadanoRoutes = require('./routes/ciudadanos');
 
-app.use('/api', ciudadanoRoutes);
+app.use('/ciudadanos', ciudadanoRoutes);
 app.use('/candidatos', candidatosRouter);
 app.use('/partidos', partidosRouter);
 app.use('/funcionario', funcionarioRouter);

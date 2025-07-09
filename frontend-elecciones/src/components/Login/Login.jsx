@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import './Login.css';
 
 export default function Login() {
@@ -10,7 +10,6 @@ const navigate = useNavigate();
 
 const handleSubmit = async (e) => {
 e.preventDefault();
-
 
 const res = await fetch('http://localhost:3001/auth/login', {
   method: 'POST',
@@ -53,7 +52,12 @@ required
 />
 <button type="submit" className="login-button">Entrar</button>
 {mensaje && <p className="login-error">{mensaje}</p>}
+<Link to="/registro-ciudadano">
+      <button className="btn btn-blue">
+        Ir a Registro de Ciudadano
+      </button>
+    </Link>
 </form>
-</div>
+</div>  
 );
 }
