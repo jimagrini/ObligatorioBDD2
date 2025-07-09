@@ -16,7 +16,20 @@ const [showPartidos, setShowPartidos] = useState(false);
 const [showCandidatos, setShowCandidatos] = useState(false);
 const resultadosRef = useRef(null);
 const circuitosRef = useRef(null);
+const [mostrarFormulario, setMostrarFormulario] = useState(false);
+const [nuevaEleccion, setNuevaEleccion] = useState({
+id_eleccion: '',
+fecha_realizacion: '',
+tipo_eleccion: '',
+});
 
+const tiposValidos = [
+'Elecciones Nacionales',
+'Elecciones Departamentales',
+'Elecciones Internas',
+'Plebiscito',
+'Referendum'
+];
 const token = localStorage.getItem('token');
 
 useEffect(() => {
@@ -39,6 +52,33 @@ useEffect(() => {
     circuitosRef.current.scrollIntoView({ behavior: 'smooth' });
   }
 }, [circuitos]);
+
+
+const crearEleccion = async (e) => {
+  e.preventDefault();
+  try {
+  const res = await fetch('http://localhost:3001/elecciones/insertarEleccion', {
+  method: 'POST',
+  headers: {
+  'Content-Type': 'application/json',
+  Authorization: `Bearer ${token}`,
+  },
+  body: JSON.stringify(nuevaEleccion),
+  });
+  const data = await res.json();
+  if (res.ok) {
+  alert('✅ Elección creada exitosamente');
+  setMostrarFormulario(false);
+  setNuevaEleccion({ id_eleccion: '', fecha_realizacion: '', tipo_eleccion: '' });
+  setElecciones((prev) => [...prev, nuevaEleccion]);
+  } else {
+  alert(`❌ Error: ${data.message || 'No se pudo crear la elección'}`);
+  }
+  } catch (err) {
+  console.error(err);
+  alert('❌ Error al crear elección');
+  }
+  };
 
 const handleEliminarEleccion = async (id) => {
 if (!window.confirm(`¿Estás seguro que deseas eliminar la elección con ID ${id}?`)) return;
@@ -126,6 +166,8 @@ return (
 <div className="dashboard">
 <h2 className="dashboard-title">Dashboard Administrador</h2>
 <div className="dashboard-buttons">
+<button className="btn btn-azul"onClick={() => setMostrarFormulario(true)}> ➕ Crear Elección </button>
+  
 <button onClick={() => { setShowPartidos(!showPartidos); setShowListas(false); setShowCandidatos(false); }} className="btn btn-purple">
 {showPartidos ? 'Volver al Panel de Elecciones' : 'Administrar Partidos'}
 </button>
@@ -160,32 +202,19 @@ return (
           ))}
         </ul>
 
-        {/* Circuitos */}
-        {eleccionSeleccionada && circuitos.length > 0 && (
-          <div className="resultados-circuitos" ref={circuitosRef}>
-            <h3>Circuitos para elección ID: {eleccionSeleccionada}</h3>
-            <ul>
-              {circuitos.map((c, i) => (
-                <li key={i} className="circuito-item">
-                  <p><strong>Número:</strong> {c.NUM_CIRCUITO}</p>
-                  <p><strong>Establecimiento:</strong> {c.ID} {c.DIRECCION}</p>
-                  <p><strong>Departamento:</strong> {c.DEPARTAMENTO}</p>
-                  <p><strong>Ciudad:</strong> {c.CIUDAD}</p>
-                  <button className="btn btn-dark" onClick={() => handleResultadosDelCircuito(eleccionSeleccionada, c.NUM_CIRCUITO)}>Ver Resultados del Circuito</button>
+          {eleccionSeleccionada && circuitos.length > 0 && (
+          <div className="resultados-circuitos" ref={circuitosRef}> <h3>Circuitos para elección ID: {eleccionSeleccionada}</h3> <ul> {circuitos.map((c, i) => { const r = resultadosPorCircuito[c.NUM_CIRCUITO] || {}; return ( <li key={i} className="circuito-item"> <p><strong>Número:</strong> {c.NUM_CIRCUITO}</p> <p><strong>Establecimiento:</strong> {c.DIRECCION}</p> <p><strong>Departamento:</strong> {c.DEPARTAMENTO}</p> <p><strong>Ciudad:</strong> {c.CIUDAD}</p> <button className="btn btn-dark" onClick={() => handleResultadosDelCircuito(eleccionSeleccionada, c.NUM_CIRCUITO)}>Ver Resultados del Circuito</button>
 
-                  {resultadosPorCircuito[c.NUM_CIRCUITO] && (
+                  {Object.keys(r).length > 0 && (
                     <div className="detalle-circuito">
-                      <p><strong>✅ Válidos:</strong> {resultadosPorCircuito[c.NUM_CIRCUITO].VALIDOS || 0}</p>
-                      <p><strong>❌ Anulados:</strong> {resultadosPorCircuito[c.NUM_CIRCUITO].ANULADOS || 0}</p>
-                      <p><strong>👁 Observados:</strong> {resultadosPorCircuito[c.NUM_CIRCUITO].OBSERVADOS || 0}</p>
-                      <p><strong>🧾 Total:</strong> {resultadosPorCircuito[c.NUM_CIRCUITO].TOTAL || 0}</p>
-                      <p><strong>📦 Estado:</strong> {resultadosPorCircuito[c.NUM_CIRCUITO].CERRADO ? 'Cerrado' : 'Abierto'}</p>
+                      <p><strong>✅ Válidos:</strong> {r.VALIDOS || 0}</p>
+                      <p><strong>🗳️ Blancos:</strong> {r.BLANCO || r.BLANCOS || 0}</p>
+                      <p><strong>❌ Anulados:</strong> {r.ANULADOS || 0}</p>
+                      <p><strong>👁 Observados:</strong> {r.OBSERVADOS || 0}</p>
+                      <p><strong>🧾 Total:</strong> {r.TOTAL || 0}</p>
+                      <p><strong>📦 Estado:</strong> {r.CERRADO ? 'Cerrado' : 'Abierto'}</p>
 
-                      {resultadosPorCircuito[c.NUM_CIRCUITO].GANADOR && (
-                        <p><strong>🏆 Ganador:</strong> Lista {resultadosPorCircuito[c.NUM_CIRCUITO].GANADOR.NUMERO_LISTA} ({resultadosPorCircuito[c.NUM_CIRCUITO].GANADOR.NOMBRE_PARTIDO}) con {resultadosPorCircuito[c.NUM_CIRCUITO].GANADOR.PORCENTAJE}%</p>
-                      )}
-
-                      {Array.isArray(resultadosPorCircuito[c.NUM_CIRCUITO].LISTAS) && (
+                      {Array.isArray(r.LISTAS) && r.LISTAS.length > 0 && (
                         <table className="tabla-listas">
                           <thead>
                             <tr>
@@ -195,7 +224,7 @@ return (
                             </tr>
                           </thead>
                           <tbody>
-                            {resultadosPorCircuito[c.NUM_CIRCUITO].LISTAS.map((l, idx) => (
+                            {r.LISTAS.map((l, idx) => (
                               <tr key={idx}>
                                 <td>{l.NUMERO_LISTA}</td>
                                 <td>{l.NOMBRE_PARTIDO}</td>
@@ -208,9 +237,10 @@ return (
                     </div>
                   )}
                 </li>
-              ))}
-            </ul>
-          </div>
+              );
+            })}
+          </ul>
+          </div> 
         )}
 
         {/* Resultados Totales */}
@@ -247,6 +277,56 @@ return (
       </>
     )}
   </div>
+
+  {mostrarFormulario && (
+<div className="modal-overlay"> <div className="modal"> <h3>Nueva Elección</h3> <form onSubmit={crearEleccion} className="form-eleccion"> <input type="number" placeholder="ID de Elección" value={nuevaEleccion.id_eleccion} onChange={(e) => setNuevaEleccion({ ...nuevaEleccion, id_eleccion: e.target.value, }) } required />
+
+    <input
+      type="date"
+      placeholder="Fecha de Realización"
+      value={nuevaEleccion.fecha_realizacion}
+      onChange={(e) =>
+        setNuevaEleccion({
+          ...nuevaEleccion,
+          fecha_realizacion: e.target.value,
+        })
+      }
+      required
+    />
+
+    <select
+      value={nuevaEleccion.tipo_eleccion}
+      onChange={(e) =>
+        setNuevaEleccion({
+          ...nuevaEleccion,
+          tipo_eleccion: e.target.value,
+        })
+      }
+      required
+    >
+      <option value="">Seleccionar tipo</option>
+      {tiposValidos.map((tipo) => (
+        <option key={tipo} value={tipo}>
+          {tipo}
+        </option>
+      ))}
+    </select>
+
+    <div className="form-buttons">
+      <button type="submit" className="btn btn-verde">
+        Crear
+      </button>
+      <button
+        type="button"
+        className="btn btn-rojo"
+        onClick={() => setMostrarFormulario(false)}
+      >
+        Cancelar
+      </button>
+    </div>
+  </form>
+</div>
+</div> )}
 </Layout>
 );
 }

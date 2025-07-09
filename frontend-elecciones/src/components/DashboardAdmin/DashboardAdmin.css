@@ -113,3 +113,55 @@ border-radius: 5px;
 margin-bottom: 1rem;
 font-weight: bold;
 }
+
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+    }
+    
+    .modal {
+    background: white;
+    padding: 2rem;
+    border-radius: 10px;
+    width: 100%;
+    max-width: 400px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    }
+    
+    .modal h3 {
+    margin-bottom: 1rem;
+    }
+    
+    .form-eleccion input,
+    .form-eleccion select {
+    display: block;
+    width: 100%;
+    margin-bottom: 1rem;
+    padding: 0.5rem;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    }
+    
+    .form-buttons {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    }
+    
+    .btn-azul {
+    background-color: #007bff;
+    color: white;
+    padding: 0.6rem 1rem;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    }

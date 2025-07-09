@@ -91,17 +91,24 @@ CREATE TABLE ELECCION (
 
 -- Tabla VOTO
 CREATE TABLE VOTO (
-  numero_voto INT NOT NULL PRIMARY KEY,
-  fecha DATE,
-  hora TIME,
-  condicion VARCHAR(50),
-  esObservado BOOLEAN,
-  id_eleccion INT,
-  num_circuito INT,
-  numero_lista INT,
-  FOREIGN KEY (id_eleccion) REFERENCES ELECCION(id_eleccion),
-  FOREIGN KEY (num_circuito) REFERENCES CIRCUITO(num_circuito),
-  FOREIGN KEY (numero_lista) REFERENCES LISTA(numero)
+numero_voto INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+id_eleccion INTEGER NOT NULL,
+numero_lista INTEGER,
+num_circuito INTEGER NOT NULL,
+condicion VARCHAR(10) CHECK (condicion IN ('VALIDO', 'ANULADO', 'BLANCO')),
+esObservado SMALLINT DEFAULT 0, -- Usamos SMALLINT para simular BOOLEAN: 0 = FALSE, 1 = TRUE
+FOREIGN KEY (id_eleccion) REFERENCES ELECCION(id_eleccion),
+FOREIGN KEY (numero_lista) REFERENCES LISTA(numero),
+FOREIGN KEY (num_circuito) REFERENCES CIRCUITO(num_circuito)
+);
+
+--votacion
+CREATE TABLE VOTACION_REALIZADA (
+ci VARCHAR(10) NOT NULL,
+id_eleccion INT NOT NULL,
+PRIMARY KEY (ci, id_eleccion),
+FOREIGN KEY (ci) REFERENCES CIUDADANO(ci),
+FOREIGN KEY (id_eleccion) REFERENCES ELECCION(id_eleccion)
 );
 
 -- Tabla PERTENECE_A_LISTA
@@ -126,7 +133,7 @@ CREATE TABLE TRABAJA_EN_ELECCION (
 
 --Tabla USUARIO
 CREATE TABLE USUARIO (
-  username VARCHAR(50) PRIMARY KEY,
+  username VARCHAR(50) PRIMARY KEY NOT NULL,
   password_hash VARCHAR(100),
   ci CHAR(8),
   rol VARCHAR(20),

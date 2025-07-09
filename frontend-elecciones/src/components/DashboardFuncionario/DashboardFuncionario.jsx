@@ -12,17 +12,18 @@ const navigate = useNavigate();
 
 useEffect(() => {
 if (!token) return;
+
 fetch('http://localhost:3001/funcionario/resumen', {
-headers: {
-Authorization: `Bearer ${token}`
-}
+  headers: {
+    Authorization: `Bearer ${token}`
+  }
 })
-.then(res => res.json())
-.then(data => setResumen(data))
-.catch(err => {
-console.error('Error al cargar resumen:', err);
-setError('Error al obtener resumen');
-});
+  .then(res => res.json())
+  .then(data => setResumen(data))
+  .catch(err => {
+    console.error('Error al cargar resumen:', err);
+    setError('Error al obtener resumen');
+  });
 }, [token]);
 
 const cerrarVotacion = async () => {
@@ -46,6 +47,7 @@ return (
 <div className="funcionario-dashboard">
 {error && <p className="error-text">{error}</p>}
 {!resumen && !error && <p className="loading-text">Cargando resumen...</p>}
+
     {resumen && (
       <>
         <h2 className="dashboard-title">Resumen de Votos - Circuito {resumen.circuito}</h2>
@@ -54,6 +56,7 @@ return (
           <ul>
             <li><strong>✅ Válidos:</strong> {getCantidadPorCondicion('VALIDO')}</li>
             <li><strong>❌ Anulados:</strong> {getCantidadPorCondicion('ANULADO')}</li>
+            <li><strong>🕳 Blanco:</strong> {getCantidadPorCondicion('BLANCO')}</li>
             <li><strong>👁 Observados:</strong> {resumen.observados}</li>
             <li><strong>🧾 Total:</strong> {resumen.total}</li>
           </ul>

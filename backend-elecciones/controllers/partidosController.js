@@ -35,7 +35,16 @@ res.status(500).json({ error: 'Error al eliminar el partido', detalle: error.mes
 async function obtenerPartidos(req, res) {
 try {
 const conn = await getConnection();
-const result = await conn.query('SELECT * FROM PARTIDO');
+const result = await conn.query(`SELECT
+P.nombre,
+P.direccion,
+P.ci_presidente,
+P.ci_vicepresidente,
+C1.nombre AS nombre_presidente,
+C2.nombre AS nombre_vicepresidente
+FROM PARTIDO P
+LEFT JOIN CIUDADANO C1 ON P.ci_presidente = C1.ci
+LEFT JOIN CIUDADANO C2 ON P.ci_vicepresidente = C2.ci;`);
 conn.closeSync();
 res.json(result);
 } catch (error) {
